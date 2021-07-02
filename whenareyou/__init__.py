@@ -1,11 +1,12 @@
-import os
-from functools import lru_cache
-from dateutil import tz
-
-import requests
 import csv
+import datetime
+import os
+import requests
+from functools import lru_cache
 from urllib.parse import quote_plus
-from pytz import timezone
+from zoneinfo import ZoneInfo
+
+
 from tzwhere import tzwhere
 
 
@@ -41,7 +42,7 @@ def cached_json_get(url):
 def get_tz(lat, lng):
     tzinfo = tzw.tzNameAt(lat, lng)
     if tzinfo:
-        return timezone(tzinfo)
+        return ZoneInfo(tzinfo)
     else:
         return None
 
@@ -56,18 +57,19 @@ def whenareyou(address):
 
 def whenareyou_apt(airport):
     if not airports_dict[airport]['tz_olson']=='\\N':
-        return timezone(airports_dict[airport]['tz_olson'])
+        return ZoneInfo(airports_dict[airport]['tz_olson'])
     else:
         tzinfo = get_tz(float(airports_dict[airport]['lat']),
                         float(airports_dict[airport]['lng']))
         if tzinfo:
             return tzinfo
         else:
-            tot_offset = float(airports_dict[airport]['tz'])*3600
-            return tz.tzoffset(airports_dict[airport]['name'] + ' ' +
-                               airports_dict[airport]['city'], tot_offset)
+            tot_offset = float(airports_dict[airport]['tz'])
+            return datetime.timezone(datetime.timedelta(hours=tot_offset),
+                                     name=(airports_dict[airport]['name'] + ' ' +
+                                     airports_dict[airport]['city']))
 
 
 
 if __name__ == '__main__':
-    main()
+    print("main()")
