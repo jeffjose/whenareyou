@@ -40,8 +40,7 @@ def get_tz(lat, lng, _tf=TimezoneFinder()):
     tzinfo = _tf.timezone_at(lng=lng, lat=lat)
     if tzinfo:
         return ZoneInfo(tzinfo)
-    else:
-        return None
+    return None
 
 
 def whenareyou(address):
@@ -55,16 +54,16 @@ def whenareyou(address):
 def whenareyou_apt(airport):
     if not airports_dict[airport]['tz_olson']=='\\N':
         return ZoneInfo(airports_dict[airport]['tz_olson'])
-    else:
-        tzinfo = get_tz(float(airports_dict[airport]['lat']),
-                        float(airports_dict[airport]['lng']))
-        if tzinfo:
-            return tzinfo
-        else:
-            tot_offset = float(airports_dict[airport]['tz'])
-            return datetime.timezone(datetime.timedelta(hours=tot_offset),
-                                     name=(airports_dict[airport]['name'] + ' ' +
-                                     airports_dict[airport]['city']))
+
+    tzinfo = get_tz(float(airports_dict[airport]['lat']),
+                    float(airports_dict[airport]['lng']))
+    if tzinfo:
+        return tzinfo
+
+    tot_offset = float(airports_dict[airport]['tz'])
+    return datetime.timezone(datetime.timedelta(hours=tot_offset),
+                             name=(airports_dict[airport]['name'] + ' ' +
+                             airports_dict[airport]['city']))
 
 
 
