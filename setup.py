@@ -21,5 +21,6 @@ setup(
     license='MIT',
     packages=find_packages(),
     install_requires=required,
+    python_requires='>=3.9',
     include_package_data=True,
 )

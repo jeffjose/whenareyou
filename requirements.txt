@@ -1,3 +1,2 @@
-python_version<='3.9'
-requests<=2.13.0
-tzwhere
+requests
+timezonefinder

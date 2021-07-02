@@ -7,7 +7,7 @@ from urllib.parse import quote_plus
 from zoneinfo import ZoneInfo
 
 
-from tzwhere import tzwhere
+from timezonefinder import TimezoneFinder
 
 
 LONG_LAT_URL = ('https://maps.googleapis.com/maps/api/geocode/json?address={0}'
@@ -27,9 +27,6 @@ with open(airports_csv_path, encoding="utf-8") as csvfile:
         airports_dict[row['iata']] = row
 
 
-tzw = tzwhere.tzwhere()
-
-
 @lru_cache(None)
 def cached_json_get(url):
     """
@@ -39,8 +36,8 @@ def cached_json_get(url):
     return requests.get(url).json()
 
 
-def get_tz(lat, lng):
-    tzinfo = tzw.tzNameAt(lat, lng)
+def get_tz(lat, lng, _tf=TimezoneFinder()):
+    tzinfo = _tf.timezone_at(lng=lng, lat=lat)
     if tzinfo:
         return ZoneInfo(tzinfo)
     else:
