@@ -2,10 +2,10 @@ import csv
 import datetime
 import os
 import requests
+
 from functools import lru_cache
 from urllib.parse import quote#, quote_plus
 from zoneinfo import ZoneInfo
-
 
 from timezonefinder import TimezoneFinder
 
@@ -13,27 +13,30 @@ from timezonefinder import TimezoneFinder
 # old / broken: using google maps api to obtain address lat/lng
 # -----------------------------------------------------------------------------
 _LONG_LAT_URL = ('https://maps.googleapis.com/maps/api/geocode/json?address={0}'
-                '&sensor=false')
-
-@lru_cache(None)
-def _cached_json_get(url):
-    """
-    Makes a get to that URL and caches it. Simple right? Oh it also returns the
-    JSON as a dict for you already!
-    """
-    return requests.get(url).json()
-
+                 '&sensor=false')
 # -----------------------------------------------------------------------------
 # alternative: use openstreetmap
 # -----------------------------------------------------------------------------
 _LONG_LAT_URL_Nominatim = "http://nominatim.openstreetmap.org/search?q="
+# -----------------------------------------------------------------------------
+
+
+# HELPERS ---------------------------------------------------------------------
+@lru_cache(None)
+def _cached_json_get(url):
+    """
+    a general helper -
+    Makes a get to that URL and caches it. Simple right? Oh it also returns the
+    JSON as a dict for you already!
+    """
+    return requests.get(url).json()
 
 def _queryOSM(address):
     """
     a helper to query nominatim.openstreetmap for given address
     """
     url = _LONG_LAT_URL_Nominatim + quote(address) + '&format=json&polygon=0'
-    response = requests.get(url).json()[0]
+    response = _cached_json_get(url)[0]
     return (float(response.get(key)) for key in ('lat', 'lon'))
 
 def _get_tz(lat, lng, _tf=TimezoneFinder()):
@@ -46,6 +49,7 @@ def _get_tz(lat, lng, _tf=TimezoneFinder()):
     return None
 
 
+# MAIN METHODS ----------------------------------------------------------------
 def whenareyou(address):
     """
     Find the time zone of a given address
@@ -68,9 +72,7 @@ def whenareyou(address):
     return _get_tz(*_queryOSM(address))#latlong['lat'], latlong['lng'])
 
 
-# -----------------------------------------------------------------------------
-# IATA airport code to time zone
-# -----------------------------------------------------------------------------
+
 _airports_dict = {}
 with open(os.path.join(os.path.dirname(__file__), 'airports.csv'), encoding="utf-8") as csvfile:
     airports_reader = csv.DictReader(
@@ -82,6 +84,7 @@ with open(os.path.join(os.path.dirname(__file__), 'airports.csv'), encoding="utf
         _airports_dict[row['iata']] = row
 
 del airports_reader, csvfile, row
+
 
 def whenareyou_IATA(airport):
     """
