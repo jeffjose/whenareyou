@@ -9,22 +9,11 @@ from zoneinfo import ZoneInfo
 
 from timezonefinder import TimezoneFinder
 
-
+# -----------------------------------------------------------------------------
+# old / broken: using google maps api to obtain address lat/lng
+# -----------------------------------------------------------------------------
 _LONG_LAT_URL = ('https://maps.googleapis.com/maps/api/geocode/json?address={0}'
                 '&sensor=false')
-
-_airports_dict = {}
-with open(os.path.join(os.path.dirname(__file__), 'airports.csv'), encoding="utf-8") as csvfile:
-    airports_reader = csv.DictReader(
-        csvfile,
-        fieldnames=['id', 'name', 'city', 'country', 'iata', 'icao', 'lat',
-                    'lng', 'alt', 'tz', 'dst', 'tz_olson'],
-        restkey='info')
-    for row in airports_reader:
-        _airports_dict[row['iata']] = row
-
-del airports_reader, csvfile, row
-
 
 @lru_cache(None)
 def _cached_json_get(url):
@@ -36,6 +25,9 @@ def _cached_json_get(url):
 
 
 def _get_tz(lat, lng, _tf=TimezoneFinder()):
+    """
+    a helper to call timezonefinder
+    """
     tzinfo = _tf.timezone_at(lng=lng, lat=lat)
     if tzinfo:
         return ZoneInfo(tzinfo)
@@ -63,6 +55,21 @@ def whenareyou(address):
 
     return _get_tz(latlong['lat'], latlong['lng'])
 
+
+# -----------------------------------------------------------------------------
+# IATA airport code to time zone
+# -----------------------------------------------------------------------------
+_airports_dict = {}
+with open(os.path.join(os.path.dirname(__file__), 'airports.csv'), encoding="utf-8") as csvfile:
+    airports_reader = csv.DictReader(
+        csvfile,
+        fieldnames=['id', 'name', 'city', 'country', 'iata', 'icao', 'lat',
+                    'lng', 'alt', 'tz', 'dst', 'tz_olson'],
+        restkey='info')
+    for row in airports_reader:
+        _airports_dict[row['iata']] = row
+
+del airports_reader, csvfile, row
 
 def whenareyou_IATA(airport):
     """
