@@ -3,7 +3,7 @@ whenareyou
 
 Gets the time zone of any location in the world.
 
-This uses `nominatim.openstreetmap.org`'s API to search the location. It caches the results so the server isn't stressed by repeated queries of the same address.
+This uses `nominatim.openstreetmap.org`'s API to search the location. It caches the results so that the server isn't stressed by repeated queries of the same address.
 
 ## example usage
 
