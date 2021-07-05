@@ -64,9 +64,9 @@ def whenareyou(address):
     return _get_tz(latlong['lat'], latlong['lng'])
 
 
-def whenareyou_apt(airport):
+def whenareyou_IATA(airport):
     """
-    Find the time zone of a given IATA code airport
+    Find the time zone of a given airport IATA code
 
     Parameters
     ----------
