@@ -22,6 +22,7 @@ with open(os.path.join(os.path.dirname(__file__), 'airports.csv'), encoding="utf
         restkey='info')
     for row in airports_reader:
         _airports_dict[row['iata']] = row
+
 del airports_reader, csvfile, row
 
 
@@ -42,6 +43,20 @@ def _get_tz(lat, lng, _tf=TimezoneFinder()):
 
 
 def whenareyou(address):
+    """
+    Find the time zone of a given address
+
+    Parameters
+    ----------
+    address : str
+        address to search.
+
+    Returns
+    -------
+    tzinfo
+        zoneinfo.ZoneInfo
+
+    """
     latlong = _cached_json_get(
         _LONG_LAT_URL.format(quote_plus(address))
     )['results'][0]['geometry']['location']
@@ -50,11 +65,26 @@ def whenareyou(address):
 
 
 def whenareyou_apt(airport):
+    """
+    Find the time zone of a given IATA code airport
+
+    Parameters
+    ----------
+    airport : str
+        airport IATA code.
+
+    Returns
+    -------
+    tzinfo
+        datetime.timezone or zoneinfo.ZoneInfo
+
+    """
+    airport = airport.upper()
     if not _airports_dict[airport]['tz_olson']=='\\N':
         return ZoneInfo(_airports_dict[airport]['tz_olson'])
 
     tzinfo = _get_tz(float(_airports_dict[airport]['lat']),
-                    float(_airports_dict[airport]['lng']))
+                     float(_airports_dict[airport]['lng']))
     if tzinfo:
         return tzinfo
 
