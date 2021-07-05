@@ -3,7 +3,7 @@ import datetime
 import os
 import requests
 from functools import lru_cache
-from urllib.parse import quote_plus
+from urllib.parse import quote#, quote_plus
 from zoneinfo import ZoneInfo
 
 
@@ -23,6 +23,18 @@ def _cached_json_get(url):
     """
     return requests.get(url).json()
 
+# -----------------------------------------------------------------------------
+# alternative: use openstreetmap
+# -----------------------------------------------------------------------------
+_LONG_LAT_URL_Nominatim = "http://nominatim.openstreetmap.org/search?q="
+
+def _queryOSM(address):
+    """
+    a helper to query nominatim.openstreetmap for given address
+    """
+    url = _LONG_LAT_URL_Nominatim + quote(address) + '&format=json&polygon=0'
+    response = requests.get(url).json()[0]
+    return (float(response.get(key)) for key in ('lat', 'lon'))
 
 def _get_tz(lat, lng, _tf=TimezoneFinder()):
     """
@@ -49,11 +61,11 @@ def whenareyou(address):
         zoneinfo.ZoneInfo
 
     """
-    latlong = _cached_json_get(
-        _LONG_LAT_URL.format(quote_plus(address))
-    )['results'][0]['geometry']['location']
+    # latlong = _cached_json_get(
+    #     _LONG_LAT_URL.format(quote_plus(address))
+    # )['results'][0]['geometry']['location']
 
-    return _get_tz(latlong['lat'], latlong['lng'])
+    return _get_tz(*_queryOSM(address))#latlong['lat'], latlong['lng'])
 
 
 # -----------------------------------------------------------------------------
