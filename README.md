@@ -1,10 +1,9 @@
 whenareyou
 ==========
 
-Gets the timezone of any location in the world.
+Gets the time zone of any location in the world.
 
-This uses google and caches the results so that you can hopefully stay outside
-the free rate limit (which I have no idea how high it is).
+This uses `nominatim.openstreetmap.org`'s API to search the location. It caches the results so the server isn't stressed by repeated queries of the same address.
 
 ## example usage
 
