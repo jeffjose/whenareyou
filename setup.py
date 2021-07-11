@@ -6,7 +6,7 @@ from setuptools import find_packages, setup
 with open('requirements.txt') as requirements:
     required = requirements.read().splitlines()
 
-with open('README.rst') as readme:
+with open('README.md') as readme:
     long_description = readme.read()
 
 
