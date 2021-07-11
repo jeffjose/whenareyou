@@ -102,8 +102,8 @@ def whenareyou_IATA(airport):
 
     """
     airport = airport.upper()
-    if not _airports_dict[airport]['tz_olson']=='\\N':
-        return ZoneInfo(_airports_dict[airport]['tz_olson'])
+    # if not _airports_dict[airport]['tz_olson']=='\\N':
+    #     return ZoneInfo(_airports_dict[airport]['tz_olson'])
 
     tzinfo = _get_tz(float(_airports_dict[airport]['lat']),
                      float(_airports_dict[airport]['lng']))
