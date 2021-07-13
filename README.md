@@ -3,7 +3,7 @@ whenareyou
 
 Gets the time zone of any location in the world.
 
-This uses `nominatim.openstreetmap.org`'s API to search the location. It caches the results so that the server isn't stressed by repeated queries of the same address.
+Modified version of @sils [whenareyou](https://github.com/aerupt/whenareyou). Uses `nominatim.openstreetmap.org` to search the location. It caches the results so that the server isn't stressed by repeated queries of the same address.
 
 ## example usage
 
