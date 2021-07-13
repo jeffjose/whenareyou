@@ -10,7 +10,7 @@ class TestWhenareyou(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         # to run before all tests
-        print("\ntesting whenareyou.whenareyou...")
+        pass
 
     @classmethod
     def tearDownClass(cls):
@@ -25,6 +25,8 @@ class TestWhenareyou(unittest.TestCase):
         pass
 
     def test_whenareyou(self):
+        print("\ntesting whenareyou.whenareyou")
+        # valid queries
         expected = ZoneInfo("Europe/Brussels")
         actual = whenareyou("Brussels, Europe")
         self.assertEqual(expected, actual)
@@ -37,13 +39,33 @@ class TestWhenareyou(unittest.TestCase):
         actual = whenareyou("Springfield")
         self.assertEqual(expected, actual)
 
+    def test_whenareyou_ivd(self):
+        # invalid queries
+        ivd = "an invalid address"
+        expected = ValueError
+        self.assertRaises(expected, whenareyou, ivd)
+
 
     def test_whenareyou_IATA(self):
+        print("\ntesting whenareyou.whenareyou_IATA")
+        # valid queries
         expect = ZoneInfo("Asia/Novosibirsk")
         actual = whenareyou_IATA("OVB")
         self.assertEqual(expect, actual)
 
+        expect = ZoneInfo("America/Vancouver")
+        actual = whenareyou_IATA("yvr")
+        self.assertEqual(expect, actual)
 
+        expect = ZoneInfo("Asia/Shanghai")
+        actual = whenareyou_IATA("  PVG")
+        self.assertEqual(expect, actual)
+
+    def test_whenareyou_IATA_ivd(self):
+        # invalid queries
+        ivd = "123"
+        expected = ValueError
+        self.assertRaises(expected, whenareyou_IATA, ivd)
 
 
 

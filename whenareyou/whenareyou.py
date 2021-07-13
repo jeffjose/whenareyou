@@ -1,7 +1,6 @@
-import csv
-import datetime
 import os
 import requests
+
 
 from functools import lru_cache
 from urllib.parse import quote#, quote_plus
@@ -36,8 +35,10 @@ def _queryOSM(address):
     a helper to query nominatim.openstreetmap for given address
     """
     url = _LONG_LAT_URL_Nominatim + quote(address) + '&format=json&polygon=0'
-    response = _cached_json_get(url)[0]
-    return (float(response.get(key)) for key in ('lat', 'lon'))
+    response = _cached_json_get(url)
+    if not response:
+        raise ValueError(f"Address not found: '{address}'")
+    return (float(response[0].get(key)) for key in ('lat', 'lon'))
 
 def _get_tz(lat, lng, _tf=TimezoneFinder()):
     """
@@ -65,25 +66,19 @@ def whenareyou(address):
         zoneinfo.ZoneInfo
 
     """
-    # latlong = _cached_json_get(
-    #     _LONG_LAT_URL.format(quote_plus(address))
-    # )['results'][0]['geometry']['location']
-
-    return _get_tz(*_queryOSM(address))#latlong['lat'], latlong['lng'])
+    # adding "geolocator" kwarg would allow to select geolocating service,
+    # i.e. the "geolocator" keyword would select a function like _queryOSM
+    return _get_tz(*_queryOSM(address))
 
 
 
-_airports_dict = {}
 with open(os.path.join(os.path.dirname(__file__), 'airports.csv'), encoding="utf-8") as csvfile:
-    airports_reader = csv.DictReader(
-        csvfile,
-        fieldnames=['id', 'name', 'city', 'country', 'iata', 'icao', 'lat',
-                    'lng', 'alt', 'tz', 'dst', 'tz_olson'],
-        restkey='info')
-    for row in airports_reader:
-        _airports_dict[row['iata']] = row
+    data = csvfile.read().splitlines()
+    for i, l in enumerate(data):
+        data[i] = l.split(",")
+    _airports_dict = {item[0]: list(item[1:]) for item in zip(*data)}
 
-del airports_reader, csvfile, row
+del csvfile, data, i, l
 
 
 def whenareyou_IATA(airport):
@@ -101,16 +96,13 @@ def whenareyou_IATA(airport):
         datetime.timezone or zoneinfo.ZoneInfo
 
     """
-    airport = airport.upper()
-    # if not _airports_dict[airport]['tz_olson']=='\\N':
-    #     return ZoneInfo(_airports_dict[airport]['tz_olson'])
+    airport = airport.upper().strip()
+    l = _airports_dict["iata_code"]
+    ix = l.index(airport) if airport in l else None
 
-    tzinfo = _get_tz(float(_airports_dict[airport]['lat']),
-                     float(_airports_dict[airport]['lng']))
-    if tzinfo:
-        return tzinfo
+    if not ix:
+        raise ValueError(f"IATA code not found: '{airport}'")
 
-    tot_offset = float(_airports_dict[airport]['tz'])
-    return datetime.timezone(datetime.timedelta(hours=tot_offset),
-                             name=(_airports_dict[airport]['name'] + ' ' +
-                             _airports_dict[airport]['city']))
+    tzinfo = _get_tz(float(_airports_dict['latitude_deg'][ix]),
+                     float(_airports_dict['longitude_deg'][ix]))
+    return tzinfo
