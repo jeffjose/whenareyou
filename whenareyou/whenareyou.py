@@ -4,7 +4,7 @@ import requests
 
 from functools import lru_cache
 from urllib.parse import quote#, quote_plus
-from zoneinfo import ZoneInfo
+# from zoneinfo import ZoneInfo
 
 from timezonefinder import TimezoneFinder
 
@@ -42,11 +42,12 @@ def _queryOSM(address):
 
 def _get_tz(lat, lng, _tf=TimezoneFinder()):
     """
-    a helper to call timezonefinder
+    a helper to call timezonefinder.
+    returns IANA time zone name of given lat/long coordinates
     """
     tzinfo = _tf.timezone_at(lng=lng, lat=lat)
     if tzinfo:
-        return ZoneInfo(tzinfo)
+        return tzinfo
     return None
 
 
