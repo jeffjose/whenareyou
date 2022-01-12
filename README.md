@@ -1,9 +1,9 @@
 whenareyou
 ==========
 
-Gets the time zone of any location in the world.
+Gets the time zone name of any location in the world.
 
-This fork is a modified version of @sils [whenareyou](https://github.com/aerupt/whenareyou). Uses `nominatim.openstreetmap.org` to search the location. It caches the results so that the server isn't stressed by repeated queries of the same address.
+This fork is a (heavily) modified version of @sils [whenareyou](https://github.com/aerupt/whenareyou). Uses `nominatim.openstreetmap.org` to search the location. It caches the results so that the server isn't stressed by repeated queries of the same address.
 
 ## example usage
 
@@ -13,24 +13,23 @@ from whenareyou import whenareyou
 tz = whenareyou('Hamburg')
 
 tz
-Out[3]: zoneinfo.ZoneInfo(key='Europe/Berlin')
+Out[1]: 'Europe/Berlin'
 
 from datetime import datetime
+from zoneinfo import ZoneInfo # Python 3.9+
 
-datetime(2002, 10, 27, 6, 0, 0, tzinfo=tz)
-Out[5]: datetime.datetime(2002, 10, 27, 6, 0, tzinfo=zoneinfo.ZoneInfo(key='Europe/Berlin'))
-
-datetime(2002, 10, 27, 6, 0, 0, tzinfo=tz).isoformat()
-Out[6]: '2002-10-27T06:00:00+01:00'
+datetime(2002, 10, 27, 6, 0, 0, tzinfo=ZoneInfo(tz)).isoformat()
+Out[2]: '2002-10-27T06:00:00+01:00'
 ```
 Lookup of IATA airport codes (3-letter) is also included:
 ```Python
 from whenareyou import whenareyou_IATA
 
 whenareyou_IATA('PVG') # Shanghai Pudong
-Out[8]: zoneinfo.ZoneInfo(key='Asia/Shanghai')
+Out[3]: 'Asia/Shanghai'
 ```
 
 ### requires
-- Python 3.9+
+- v0.4 required Python 3.9+ (zoneinfo module)
+- v0.5 API change: zoneinfo no longer required, should work well with older versions of Python
 - [requests](https://pypi.org/project/requests/), [timezonefinder](https://pypi.org/project/timezonefinder/)
