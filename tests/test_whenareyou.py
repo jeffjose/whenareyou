@@ -1,6 +1,5 @@
 import unittest
 
-from zoneinfo import ZoneInfo
 from whenareyou import whenareyou, whenareyou_IATA
 
 
@@ -27,15 +26,15 @@ class TestWhenareyou(unittest.TestCase):
     def test_whenareyou(self):
         print("\ntesting whenareyou.whenareyou")
         # valid queries
-        expected = ZoneInfo("Europe/Brussels")
+        expected = "Europe/Brussels"
         actual = whenareyou("Brussels, Europe")
         self.assertEqual(expected, actual)
 
-        expected = ZoneInfo("Asia/Taipei")
+        expected = "Asia/Taipei"
         actual = whenareyou("Tainan")
         self.assertEqual(expected, actual)
 
-        expected = ZoneInfo("America/Chicago")
+        expected = "America/Chicago"
         actual = whenareyou("Springfield")
         self.assertEqual(expected, actual)
 
@@ -49,15 +48,15 @@ class TestWhenareyou(unittest.TestCase):
     def test_whenareyou_IATA(self):
         print("\ntesting whenareyou.whenareyou_IATA")
         # valid queries
-        expect = ZoneInfo("Asia/Novosibirsk")
+        expect = "Asia/Novosibirsk"
         actual = whenareyou_IATA("OVB")
         self.assertEqual(expect, actual)
 
-        expect = ZoneInfo("America/Vancouver")
+        expect = "America/Vancouver"
         actual = whenareyou_IATA("yvr")
         self.assertEqual(expect, actual)
 
-        expect = ZoneInfo("Asia/Shanghai")
+        expect = "Asia/Shanghai"
         actual = whenareyou_IATA("  PVG")
         self.assertEqual(expect, actual)
 
