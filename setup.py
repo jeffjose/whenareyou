@@ -12,8 +12,8 @@ with open('README.md') as readme:
 
 setup(
     name='whenareyou',
-    version='0.4.0',
-    description='Gets the time zone of any location in the world',
+    version='0.5.0',
+    description='Gets the time zone name of any location in the world',
     long_description=long_description,
     url='https://github.com/aerupt/whenareyou',
     author='Lasse Schuirmann',
