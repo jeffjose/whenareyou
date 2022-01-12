@@ -45,9 +45,9 @@ def _get_tz(lat, lng, _tf=TimezoneFinder()):
     a helper to call timezonefinder.
     returns IANA time zone name of given lat/long coordinates
     """
-    tzinfo = _tf.timezone_at(lng=lng, lat=lat)
-    if tzinfo:
-        return tzinfo
+    tzname = _tf.timezone_at(lng=lng, lat=lat)
+    if tzname:
+        return tzname
     return None
 
 
@@ -63,8 +63,8 @@ def whenareyou(address):
 
     Returns
     -------
-    tzinfo
-        zoneinfo.ZoneInfo
+    tzname : str
+        IANA time zone name
 
     """
     # adding "geolocator" kwarg would allow to select geolocating service,
@@ -93,8 +93,8 @@ def whenareyou_IATA(airport):
 
     Returns
     -------
-    tzinfo
-        datetime.timezone or zoneinfo.ZoneInfo
+    tzname : str
+        IANA time zone name
 
     """
     airport = airport.upper().strip()
@@ -104,6 +104,6 @@ def whenareyou_IATA(airport):
     if not ix:
         raise ValueError(f"IATA code not found: '{airport}'")
 
-    tzinfo = _get_tz(float(_airports_dict['latitude_deg'][ix]),
+    tzname = _get_tz(float(_airports_dict['latitude_deg'][ix]),
                      float(_airports_dict['longitude_deg'][ix]))
-    return tzinfo
+    return tzname
