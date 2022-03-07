@@ -3,9 +3,7 @@ import unittest
 from whenareyou import whenareyou, whenareyou_IATA
 
 
-
 class TestWhenareyou(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         # to run before all tests
@@ -19,6 +17,7 @@ class TestWhenareyou(unittest.TestCase):
     def setUp(self):
         # to run before each test
         pass
+
     def tearDown(self):
         # to run after each test
         pass
@@ -44,7 +43,6 @@ class TestWhenareyou(unittest.TestCase):
         expected = ValueError
         self.assertRaises(expected, whenareyou, ivd)
 
-
     def test_whenareyou_IATA(self):
         print("\ntesting whenareyou.whenareyou_IATA")
         # valid queries
@@ -67,6 +65,5 @@ class TestWhenareyou(unittest.TestCase):
         self.assertRaises(expected, whenareyou_IATA, ivd)
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
