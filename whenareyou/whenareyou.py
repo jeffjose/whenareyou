@@ -3,7 +3,8 @@ import requests
 
 
 from functools import lru_cache
-from urllib.parse import quote#, quote_plus
+from urllib.parse import quote  # , quote_plus
+
 # from zoneinfo import ZoneInfo
 
 from timezonefinder import TimezoneFinder
@@ -12,8 +13,10 @@ from timezonefinder import TimezoneFinder
 # -----------------------------------------------------------------------------
 # old / broken: using google maps api to obtain address lat/lng
 # -----------------------------------------------------------------------------
-_LONG_LAT_URL = ('https://maps.googleapis.com/maps/api/geocode/json?address={0}'
-                 '&sensor=false')
+_LONG_LAT_URL = (
+    "https://maps.googleapis.com/maps/api/geocode/json?address={0}"
+    "&sensor=false"
+)
 # -----------------------------------------------------------------------------
 # alternative: use openstreetmap
 # -----------------------------------------------------------------------------
@@ -31,15 +34,17 @@ def _cached_json_get(url):
     """
     return requests.get(url).json()
 
+
 def _queryOSM(address):
     """
     a helper to query nominatim.openstreetmap for given address
     """
-    url = _LONG_LAT_URL_Nominatim + quote(address) + '&format=json&polygon=0'
+    url = _LONG_LAT_URL_Nominatim + quote(address) + "&format=json&polygon=0"
     response = _cached_json_get(url)
     if not response:
         raise ValueError(f"Address not found: '{address}'")
-    return (float(response[0].get(key)) for key in ('lat', 'lon'))
+    return (float(response[0].get(key)) for key in ("lat", "lon"))
+
 
 def _get_tz(lat, lng, _tf=TimezoneFinder()):
     """
@@ -73,8 +78,9 @@ def whenareyou(address):
     return _get_tz(*_queryOSM(address))
 
 
-
-with open(os.path.join(os.path.dirname(__file__), 'airports.csv'), encoding="utf-8") as csvfile:
+with open(
+    os.path.join(os.path.dirname(__file__), "airports.csv"), encoding="utf-8"
+) as csvfile:
     data = csvfile.read().splitlines()
     for i, l in enumerate(data):
         data[i] = l.split(",")
@@ -99,12 +105,14 @@ def whenareyou_IATA(airport):
 
     """
     airport = airport.upper().strip()
-    l = _airports_dict["iata_code"]
-    ix = l.index(airport) if airport in l else None
+    iatacodes = _airports_dict["iata_code"]
+    ix = iatacodes.index(airport) if airport in iatacodes else None
 
     if not ix:
         raise ValueError(f"IATA code not found: '{airport}'")
 
-    tzname = _get_tz(float(_airports_dict['latitude_deg'][ix]),
-                     float(_airports_dict['longitude_deg'][ix]))
+    tzname = _get_tz(
+        float(_airports_dict["latitude_deg"][ix]),
+        float(_airports_dict["longitude_deg"][ix]),
+    )
     return tzname
