@@ -14,8 +14,7 @@ from timezonefinder import TimezoneFinder
 # old / broken: using google maps api to obtain address lat/lng
 # -----------------------------------------------------------------------------
 _LONG_LAT_URL = (
-    "https://maps.googleapis.com/maps/api/geocode/json?address={0}"
-    "&sensor=false"
+    "https://maps.googleapis.com/maps/api/geocode/json?address={0}&sensor=false"
 )
 # -----------------------------------------------------------------------------
 # alternative: use openstreetmap
