@@ -10,12 +10,12 @@ def get_version():
         # Py 3.8+
         from importlib import metadata
 
-        return metadata.version("imktk")
+        return metadata.version("whenareyou")
     except ImportError:
         # Py <= 3.7
         import pkg_resources
 
-        return pkg_resources.get_distribution("imktk").version
+        return pkg_resources.get_distribution("whenareyou").version
 
 
 __version__ = get_version()

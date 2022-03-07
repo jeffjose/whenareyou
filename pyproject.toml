@@ -16,5 +16,5 @@ black = "^22.1.0"
 pytest = "^7.0.1"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core @ git+https://github.com/python-poetry/poetry-core.git@master"] # allows pip install -e .
 build-backend = "poetry.core.masonry.api"
