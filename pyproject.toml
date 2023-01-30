@@ -7,13 +7,13 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = ">= 3.7"
-timezonefinder = "^5.2"
-requests = "^2.27"
+timezonefinder = ">= 5.2"
+requests = ">= 2.27"
 
 [tool.poetry.dev-dependencies]
-flake8 = "^4.0.1"
-black = "^22.1.0"
-pytest = "^7.0.1"
+flake8 = ">= 4.0.1"
+black = ">= 22.1.0"
+pytest = ">= 7.0.1"
 
 [build-system]
 requires = ["poetry-core @ git+https://github.com/python-poetry/poetry-core.git@master"] # allows pip install -e .
