@@ -1,20 +1,30 @@
 [tool.poetry]
 name = "whenareyou"
-version = "0.5.1"
+version = "0.6.0"
 description = "Gets the time zone name of any location in the world."
-authors = ["Florian Obersteiner <f.obersteiner@posteo.de>", "Lasse Schuirmann <lasse.schuirmann@gmail.com>"]
+authors = [
+    "Florian Obersteiner <f.obersteiner@posteo.de>",
+    "Lasse Schuirmann <lasse.schuirmann@gmail.com>",
+]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = ">= 3.7"
+python = ">= 3.8.1"
 timezonefinder = ">= 5.2"
 requests = ">= 2.27"
 
-[tool.poetry.dev-dependencies]
-flake8 = ">= 4.0.1"
-black = ">= 22.1.0"
-pytest = ">= 7.0.1"
+[tool.poetry.group.dev.dependencies]
+pytest = "7.*"
+black = ">= 22.12.0"
+ruff = ">= 0.0.254"
+
+[tool.ruff] # https://github.com/charliermarsh/ruff
+ignore = ["E501"]
+exclude = ["legacy", "misc"]
+extend-select = ["C4", "SIM", "TCH"]
 
 [build-system]
-requires = ["poetry-core @ git+https://github.com/python-poetry/poetry-core.git@master"] # allows pip install -e .
+requires = [
+    "poetry-core @ git+https://github.com/python-poetry/poetry-core.git@master",
+] # allows pip install -e .
 build-backend = "poetry.core.masonry.api"

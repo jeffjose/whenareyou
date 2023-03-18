@@ -81,11 +81,11 @@ with open(
     os.path.join(os.path.dirname(__file__), "airports.csv"), encoding="utf-8"
 ) as csvfile:
     data = csvfile.read().splitlines()
-    for i, l in enumerate(data):
-        data[i] = l.split(",")
+    for i, line in enumerate(data):
+        data[i] = line.split(",")
     _airports_dict = {item[0]: list(item[1:]) for item in zip(*data)}
 
-del csvfile, data, i, l
+del csvfile, data, i, line
 
 
 def whenareyou_IATA(airport):
